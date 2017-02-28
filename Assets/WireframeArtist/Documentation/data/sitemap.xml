@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="../../sitemap.xsl" type="text/xsl" media="all"?>
+<site>
+<page file="index.html" text="Home · jolix/Wireframe-Artist Wiki · GitHub" title="Home · jolix/Wireframe-Artist Wiki · GitHub">
+<page file="getting-started.html" text="Getting Started" title="Getting Started · jolix/Wireframe-Artist Wiki · GitHub"/>
+<page file="material-properties.html" text="Material Properties" title="Material Properties · jolix/Wireframe-Artist Wiki · GitHub"/>
+<page file="wireframe-baker.html" text="Wireframe Baker" title="Wireframe Baker · jolix/Wireframe-Artist Wiki · GitHub"/>
+</page>
+</site>
