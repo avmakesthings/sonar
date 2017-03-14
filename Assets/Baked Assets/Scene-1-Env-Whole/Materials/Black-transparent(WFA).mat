@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Black-transparent(WFA)
-  m_Shader: {fileID: 4800000, guid: 3f8d3548f1fb01b42be7324718c1d0fb, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6cb8823c86e8329479883acae922f334, type: 3}
   m_ShaderKeywords: _AA_ON _ALPHATEST_ON _CHANNEL_UV3 _EMISSION _MODE_WORLD _WLIGHT_SURFACE
     _WSTYLE_DEFAULT _WUV_UV0
   m_LightmapFlags: 1
@@ -67,6 +67,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     - first:
         name: _ParallaxMap
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _SpecGlossMap
       second:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -217,6 +223,9 @@ Material:
     - first:
         name: _GColor
       second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _SpecColor
+      second: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - first:
         name: _WColor
       second: {r: 1, g: 0.32352942, b: 0.5982914, a: 1}
