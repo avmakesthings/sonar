@@ -4,13 +4,14 @@ using Leap.Unity.Attributes;
 
 namespace Leap.Unity {
 
-    
-  /**
-   * Detects when specified fingers are pointing at all objects with a specified tag
-   * 
-   * Calls target object activate method when detected.
-   */
-  public class FingerDirectionTrigger : Detector {
+
+    /**
+     * Detects when specified fingers are pointing at all objects with a specified tag
+     * 
+     * Calls target object activate method when detected.
+     */
+
+    public class FingerDirectionTrigger : Detector {
     /**
      * The interval at which to check finger state.
      * @since 4.1.2
@@ -62,11 +63,9 @@ namespace Leap.Unity {
     [Tooltip("Draw this detector's Gizmos, if any. (Gizmos must be on in Unity edtor, too.)")]
     public bool ShowGizmos = true;
 
-    public string tag;
-
     private IEnumerator watcherCoroutine;
-    private IEnumerator targetFinderCoroutine;
-    private GameObject[] taggedObjects;
+    public Target[] allTargets;
+    public string targetMethodToCall;
 
     private void OnValidate(){
       if( OffAngle < OnAngle){
@@ -75,75 +74,60 @@ namespace Leap.Unity {
     }
 
     private void Awake () {
-      watcherCoroutine = fingerPointingWatcher();
-      targetFinderCoroutine = FindTaggedGameObjects();
+
+        watcherCoroutine = fingerPointingWatcher();
+        allTargets = FindObjectsOfType(typeof(Target)) as Target[];
     }
+
+    //void update() {
+
+    //    }
 
     private void OnEnable () {
       StartCoroutine(watcherCoroutine);
-      StartCoroutine(targetFinderCoroutine);
     }
   
+
     private void OnDisable () {
       StopCoroutine(watcherCoroutine);
-      StopCoroutine(targetFinderCoroutine);
       Deactivate();
-     
-
     }
 
-    //A coroutine to find all objects tagged 'tag' in a scene
-    private IEnumerator FindTaggedGameObjects()
-        {
-            while(true) { 
-              taggedObjects = GameObject.FindGameObjectsWithTag(tag);
-              yield return new WaitForSeconds(Period);
-            }
-            
-        }
 
-
-        
     //A function to run fingerpointing... for all tag objects
-
-
-
     private IEnumerator fingerPointingWatcher() {
-      Hand hand;
-      Vector3 fingerDirection;
-      Vector3 targetDirection;
-      int selectedFinger = selectedFingerOrdinal();
-      while(true){
+        Hand hand;
+        Vector3 fingerDirection;
+        Vector3 targetDirection;
+        int selectedFinger = selectedFingerOrdinal();
+        while (true){
         if(HandModel != null && HandModel.IsTracked){
           hand = HandModel.GetLeapHand();
-          if(hand != null){
+        //Check for leap hand and that targets exist in scene
+        if (hand != null && allTargets.Length>0){
 
+            foreach (Target targ in allTargets){
 
-            foreach (GameObject obj in taggedObjects){
-
-              targetDirection = selectedDirection(hand.Fingers[selectedFinger].TipPosition.ToVector3(), obj);
+              targetDirection = selectedDirection(hand.Fingers[selectedFinger].TipPosition.ToVector3(), targ);
               fingerDirection = hand.Fingers[selectedFinger].Bone(Bone.BoneType.TYPE_DISTAL).Direction.ToVector3();
               float angleTo = Vector3.Angle(fingerDirection, targetDirection);
               if(HandModel.IsTracked && angleTo <= OnAngle){
                 //Activate();
-                FingerDirectionTarget thisTarget = obj.GetComponent("FingerDirectionTarget") as FingerDirectionTarget; //Access scripts attached to target objects
-                thisTarget.testMethod();
+                triggerTargetFromFinger(targ);
+
               } else if (!HandModel.IsTracked || angleTo >= OffAngle) {
                 //Deactivate();
               }
             }
-
-
           }
         }
         yield return new WaitForSeconds(Period);
       }
     }
 
-    private Vector3 selectedDirection(Vector3 tipPosition, GameObject obj ){
+    private Vector3 selectedDirection(Vector3 tipPosition, Target targ ){
     //Pass in target object
-
-        return obj.transform.position - tipPosition;
+        return targ.transform.position - tipPosition;
 
     }
 
@@ -163,6 +147,24 @@ namespace Leap.Unity {
           return 1;
       }
     }
+
+    void triggerTargetFromFinger(Target myTarget){
+        
+      switch(FingerName){
+        case Finger.FingerType.TYPE_INDEX:
+          myTarget.onSelect();
+            return;
+        case Finger.FingerType.TYPE_MIDDLE:
+          myTarget.onScan();
+            return;
+
+      }
+    }
+
+
+
+
+
 
   #if UNITY_EDITOR
     private void OnDrawGizmos () {
