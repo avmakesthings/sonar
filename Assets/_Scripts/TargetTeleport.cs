@@ -6,32 +6,43 @@ public class TargetTeleport : Target {
     
     public MeshFilter teleportTargetMesh;
     public Vector3 targetOffset;
+    public GameEvents targetSelectedEvent = GameEvents.NO_EVENT;
+    public GameEvents targetInitEvent = GameEvents.NO_EVENT;
+    public GameEvents teleportEvent = GameEvents.NO_EVENT;
 
 
-    void teleport(Transform playerLocation) {
-        Vector3 teleportLocation = this.GetComponent<Transform>().position + targetOffset;
+
+    void Start() {
+        EventManager.StartListening (targetInitEvent.ToString(), init);
+    }
+
+        
+
+
+    void init() {
+        print ("now you can see the teleport target");
+    }
+
+
+    public override void onSelect() {
+
+        if (selected!=true) {
+            selected = true;
+            toggleActive();
+            EventManager.TriggerEvent (targetSelectedEvent.ToString());
+            teleport();
+        } 
+    }
+
+    void teleport() {
+        //Vector3 teleportLocation = this.GetComponent<Transform>().position + targetOffset;
         //find the current position of the player
 
         //reassign position with coroutine for easing, animation
 
+        //round completed 
+        EventManager.TriggerEvent(teleportEvent.ToString());
     }
 
-
-        public override void onScan() {
-        print("scanning");
-        toggleActive();
-        //do something
-        toggleActive();
-    }
-
-
-        void OnEnable()
-        {
-
-        }
-
-        void activateTelportTarget() {
-        print ("you're about to teleport");
-    }
 
 }

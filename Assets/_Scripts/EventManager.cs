@@ -31,7 +31,6 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-
     void Init ()
     {
 
@@ -69,8 +68,12 @@ public class EventManager : MonoBehaviour {
     public static void TriggerEvent (string eventName)
     {
         UnityEvent thisEvent = null;
+        //print("Looking up event name in dictionary");
+        //print(eventName);
         if (instance.eventDictionary.TryGetValue (eventName, out thisEvent))
         {
+            //print("EventManager triggering:");
+            //print(eventName);
             thisEvent.Invoke ();
         }
     }

@@ -5,10 +5,11 @@ using UnityEngine;
 abstract public class Target : MonoBehaviour {
 
     
-    private bool active;
-    private bool selected;
-
-
+    protected bool active;
+    protected bool selected;
+    //public GameEvents GameEvent;
+    
+    
     //toggles between active state
     public void toggleActive() {
         active = !active;
@@ -25,7 +26,7 @@ abstract public class Target : MonoBehaviour {
 
     //reveals target objects - triggered by scan
     public virtual void onScan() {
-        print("onScan");
+        //print("onScan");
         toggleActive();
         //do something
         toggleActive();
@@ -33,14 +34,12 @@ abstract public class Target : MonoBehaviour {
 
     //select target objects
     public virtual void onSelect() {
-        print("onSelect");
         if (selected!=true) {
             selected = true;
             toggleActive();
         }else {
             selected= false;
             toggleActive();
-
         }
         
     }
@@ -70,7 +69,7 @@ abstract public class Target : MonoBehaviour {
 
     //Helper function to test whether input is being detected - called by FingerDirectionTrigger
     public virtual void testMethod() {
-        print("test");
+        //print("test");
     }
 
 
