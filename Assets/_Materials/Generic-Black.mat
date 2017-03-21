@@ -7,8 +7,9 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Generic-Black
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _EMISSION
+  m_Shader: {fileID: 10755, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _AA_ON _ALPHAPREMULTIPLY_ON _CHANNEL_UV3 _EMISSION _MODE_WORLD
+    _WSTYLE_DEFAULT _WUV_UV0
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -75,10 +76,31 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - first:
+        name: _WMask
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _WTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
+    - first:
+        name: _AASmooth
+      second: 1.5
     - first:
         name: _BumpScale
       second: 1
+    - first:
+        name: _Channel
+      second: 0
+    - first:
+        name: _Cull
+      second: 2
     - first:
         name: _Cutoff
       second: 0.5
@@ -87,7 +109,28 @@ Material:
       second: 1
     - first:
         name: _DstBlend
+      second: 10
+    - first:
+        name: _FDist
+      second: 0.1
+    - first:
+        name: _FMode
+      second: 1
+    - first:
+        name: _FPow
+      second: 5
+    - first:
+        name: _Fade
       second: 0
+    - first:
+        name: _Fold
+      second: 3
+    - first:
+        name: _GDist
+      second: 0.35
+    - first:
+        name: _GPower
+      second: 0.5
     - first:
         name: _GlossMapScale
       second: 1
@@ -98,11 +141,17 @@ Material:
         name: _GlossyReflections
       second: 1
     - first:
+        name: _Glow
+      second: 0
+    - first:
+        name: _Limits
+      second: 1
+    - first:
         name: _Metallic
       second: 0.29
     - first:
         name: _Mode
-      second: 0
+      second: 3
     - first:
         name: _OcclusionStrength
       second: 1
@@ -131,11 +180,32 @@ Material:
         name: _UVSec
       second: 0
     - first:
+        name: _WMode
+      second: 0
+    - first:
+        name: _WOpacity
+      second: 1
+    - first:
+        name: _WParam
+      second: 0
+    - first:
+        name: _WStyle
+      second: 0
+    - first:
+        name: _WThickness
+      second: 0.05
+    - first:
+        name: _WTransparency
+      second: 1
+    - first:
+        name: _WUV
+      second: 0
+    - first:
         name: _ZTest
       second: 0
     - first:
         name: _ZWrite
-      second: 1
+      second: 0
     m_Colors:
     - first:
         name: _Color
@@ -144,8 +214,14 @@ Material:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
     - first:
+        name: _GColor
+      second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
         name: _SelectedColor
       second: {r: 1, g: 0.5, b: 0, a: 1}
     - first:
         name: _SpecColor
       second: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - first:
+        name: _WColor
+      second: {r: 0, g: 0, b: 1, a: 1}
