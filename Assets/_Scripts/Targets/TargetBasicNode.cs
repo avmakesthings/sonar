@@ -10,6 +10,7 @@ public class TargetBasicNode : Target {
     [HideInInspector] public MeshRenderer targetObject;
     public GameEvents targetSelectedEvent = GameEvents.NO_EVENT;
     public GameEvents targetInitEvent = GameEvents.NO_EVENT;
+    public AudioClip targetSound;
 
 
     void Awake() {
@@ -28,7 +29,12 @@ public class TargetBasicNode : Target {
         EventManager.StartListening (targetInitEvent.ToString(), init);
     }
 
-    
+
+    public override void onScan() {
+        AudioSource.PlayClipAtPoint(targetSound,GetComponent<Transform>().position);
+    }
+
+
 
     public override void onSelect() {
 
@@ -36,9 +42,13 @@ public class TargetBasicNode : Target {
             selected = true;
             targetObject.material = ActiveMaterial;
             toggleActive();
+            
             EventManager.TriggerEvent (targetSelectedEvent.ToString());
         } else {
         //TO-DO: add logic for deselection i.e. timer and hold finger position
+            // selected = !true;
+            // targetObject.material = InActiveMaterial;
+            // toggleActive();
         }
     }
 

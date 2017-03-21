@@ -8,6 +8,7 @@ public class TargetTeleport : Target {
     public Vector3 targetOffset;
     public bool teleportPadEnabled = false;
     public Material activatedTeleport;
+    public Material deactivatedTeleport;
     public GameEvents targetSelectedEvent = GameEvents.NO_EVENT;
     public GameEvents targetInitEvent = GameEvents.NO_EVENT;
     public GameEvents teleportEvent = GameEvents.NO_EVENT;
@@ -31,7 +32,9 @@ public class TargetTeleport : Target {
     void init() {
         print ("now you can see the teleport target");
         teleportPadEnabled = true;
-        GetComponentInChildren<MeshRenderer>().enabled= true;
+        MeshRenderer teleportMesh = GetComponentInChildren<MeshRenderer>();
+        teleportMesh.enabled= true;
+        teleportMesh.material = activatedTeleport;
     }
 
 
@@ -42,6 +45,9 @@ public class TargetTeleport : Target {
             toggleActive();
             EventManager.TriggerEvent (targetSelectedEvent.ToString());
             teleport();
+            GetComponentInChildren<MeshRenderer>().material = deactivatedTeleport;
+            
+
         } 
     }
 
@@ -51,7 +57,7 @@ public class TargetTeleport : Target {
 
         //TO-DO pass player tag into teleport call
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.transform.position = this.transform.position + Vector3.up*1;
+        player.transform.position = this.transform.position + Vector3.up*2;
         print("teleported sss");
         //reassign position with coroutine for easing, animation
 

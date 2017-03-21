@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
+
 
 public class AnimateGifTextures : MonoBehaviour {
 
 	public string animationFolder;
-	protected string pathToSequences = "_Textures/Sequences/";
+	protected string pathToSequences = "Sequences/";
 	public float duration = 0.5f;
 
 	protected Texture[] gifTextures;
@@ -15,7 +18,7 @@ public class AnimateGifTextures : MonoBehaviour {
 	void Start( )
 	{
 		string animationPath = pathToSequences + animationFolder;
-		string fullPath = Application.dataPath.ToString()+"/" + animationPath;
+		string fullPath = Application.streamingAssetsPath.ToString()+"/" + animationPath;
 		DirectoryInfo dir = new DirectoryInfo(fullPath);
 		FileInfo[] gifFrame = dir.GetFiles("*.png");
 
