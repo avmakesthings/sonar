@@ -19,7 +19,7 @@ namespace Leap.Unity {
     [Units("seconds")]
     [Tooltip("The interval in seconds at which to check this detector's conditions.")]
     [MinValue(0)]
-    public float Period = .1f; //seconds
+    public float Period = 0.5f; //seconds
 
     /**
      * The IHandModel instance to observe. 
@@ -65,6 +65,9 @@ namespace Leap.Unity {
 
     private IEnumerator watcherCoroutine;
     public Target[] allTargets;
+    public static Target lastTarget = null;
+    public static Target closestTarget = null;
+    public float selectionDelay = 0.5f;
     public string targetMethodToCall;
 
     private void OnValidate(){
@@ -101,29 +104,65 @@ namespace Leap.Unity {
         Vector3 targetDirection;
         int selectedFinger = selectedFingerOrdinal();
         while (true){
+        yield return new WaitForSeconds(Period);
         if(HandModel != null && HandModel.IsTracked){
           hand = HandModel.GetLeapHand();
         //Check for leap hand and that targets exist in scene
         if (hand != null && allTargets.Length>0){
+            
+            float minAngleTo = Mathf.Infinity;
 
             foreach (Target targ in allTargets){
-
-              targetDirection = selectedDirection(hand.Fingers[selectedFinger].TipPosition.ToVector3(), targ);
-              fingerDirection = hand.Fingers[selectedFinger].Bone(Bone.BoneType.TYPE_DISTAL).Direction.ToVector3();
-              float angleTo = Vector3.Angle(fingerDirection, targetDirection);
-              if(HandModel.IsTracked && angleTo <= OnAngle){
-                //Activate();
-                triggerTargetFromFinger(targ);
-
-              } else if (!HandModel.IsTracked || angleTo >= OffAngle) {
-                //Deactivate();
-              }
+                targetDirection = selectedDirection(hand.Fingers[selectedFinger].TipPosition.ToVector3(), targ);
+                fingerDirection = hand.Fingers[selectedFinger].Bone(Bone.BoneType.TYPE_DISTAL).Direction.ToVector3();
+                float angleTo = Vector3.Angle(fingerDirection, targetDirection);
+                if(HandModel.IsTracked && angleTo <= OnAngle && angleTo < minAngleTo){
+                    // This target is the closest! Save it
+                    closestTarget = targ;
+                    minAngleTo = angleTo;
+                } 
             }
+
+            // Do some checking about if we already scanned or selected the target...
+            if(closestTarget != null) {
+
+                // Was the target already scanned?
+                // If the lastTarget is equal to closestTarget, don't scan/select. Otherwise ...
+                if(closestTarget != lastTarget) {
+                    closestTarget.onScan();
+
+                    // start a new selection coroutine
+                    // At the end of the coroutine, if lastTarget IS equal to target, select.
+                    yield return new WaitForSeconds(selectionDelay);
+                    if(closestTarget == lastTarget) {
+                        closestTarget.onSelect();
+                    }
+
+                }
+            }
+
+            // update value of lastTarget to be closestTarget
+            lastTarget = closestTarget;
           }
         }
-        yield return new WaitForSeconds(Period);
+        
       }
     }
+
+    
+    //private IEnumerator selectionCoroutine(Target closestTarget) {
+    //    yield return new WaitForSeconds(selectionDelay);
+    //    print("closestTarget and lastTarget...");
+    //    print(closestTarget);
+    //    print(lastTarget);
+    //    if(closestTarget == lastTarget) {
+    //        print("closestTarget == lastTarget");
+    //        print(closestTarget);
+    //        print(lastTarget);
+    //        print("Are these equal?!");
+    //        closestTarget.onSelect();
+    //    }
+    //}
 
     private Vector3 selectedDirection(Vector3 tipPosition, Target targ ){
     //Pass in target object

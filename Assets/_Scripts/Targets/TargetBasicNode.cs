@@ -13,6 +13,7 @@ public class TargetBasicNode : Target {
     public AudioClip targetSound;
 
 
+
     void Awake() {
         targetObject = GetComponentInChildren<MeshRenderer>();
         targetObject.material = InActiveMaterial;
@@ -31,7 +32,9 @@ public class TargetBasicNode : Target {
 
 
     public override void onScan() {
-        AudioSource.PlayClipAtPoint(targetSound,GetComponent<Transform>().position);
+        if(!active  && targetEnabled == true) {
+            StartCoroutine("Scan");
+        }
     }
 
 
@@ -40,7 +43,6 @@ public class TargetBasicNode : Target {
 
         if (selected!=true  && targetEnabled == true) {
             selected = true;
-            targetObject.material = ActiveMaterial;
             toggleActive();
             
             EventManager.TriggerEvent (targetSelectedEvent.ToString());
@@ -50,6 +52,28 @@ public class TargetBasicNode : Target {
             // targetObject.material = InActiveMaterial;
             // toggleActive();
         }
+    }
+
+    public override void toggleActive() {
+        //check if target is active
+        if (active == true) {
+            //change material back to inactive
+            targetObject.material = InActiveMaterial;
+        }else {
+            //play target sound
+            AudioSource.PlayClipAtPoint(targetSound,GetComponent<Transform>().position);
+            //change target material to active
+            targetObject.material = ActiveMaterial;
+        }
+        //toggle active state
+        active = !active;
+    }
+
+
+    IEnumerator Scan() {
+        toggleActive();
+        yield return new WaitForSeconds(3);
+        toggleActive();
     }
 
 

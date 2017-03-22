@@ -11,7 +11,7 @@ abstract public class Target : MonoBehaviour {
     
     public bool targetEnabled = false;
     //toggles between active state
-    public void toggleActive() {
+    public virtual void toggleActive() {
         active = !active;
     }
 
